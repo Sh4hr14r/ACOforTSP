@@ -1,0 +1,122 @@
+======
+USAGE
+======
+
+
+Given the large number of ACO algorithms, also the number of command
+line options is relatively large.
+
+The default parameter settings are such, that MAX-MIN Ant System will
+be run using a 3-opt local search, using alpha = 1, beta = 2, rho =
+0.5 for a maximum of 10 seconds per each trial for 10 independent
+trials. (guess who developed MAX-MIN Ant System ;-)
+
+The executable 'acotsp' provides the following command line options
+(given are the short and the long options):
+
+-r, --tries          # number of independent trials
+-s, --tours          # number of steps in each trial
+-t, --time           # maximum time for each trial 
+-i, --tsplibfile     f inputfile (TSPLIB format necessary)
+-o, --optimum        # stop if tour better or equal optimum is found
+-m, --ants           # number of ants
+-g, --nnants         # nearest neighbours in tour construction
+-a, --alpha          # alpha (influence of pheromone trails)
+-b, --beta           # beta (influence of heuristic information)
+-e, --rho            # rho: pheromone trail evaporation
+-q, --q0             # q_0: prob. of best choice in tour construction
+-k, --nnls           # No. of nearest neighbors for local search
+-l, --localsearch    0: no local search   1: 2-opt   2: 2.5-opt   3: 3-opt
+-d, --dlb            1 use don't look bits in local search
+
+Options -u --as, -v --eas, -w --ras, -x --mmas, -y --bwas, -z --acs,
+-h, --help don't need arguments, while all the others do.  
+
+A Mandatory option is only the option "-i, --tsplibfile". Here, mandatory
+means that without specifying this option, the program won't work,
+since there is no input file. 
+
+All the other options take some default values. The default values for
+these are:
+
+-r, --tries       : 10
+-s, --tours       : 100
+-t, --time        : 10 /* seconds */
+-o, --optimum     : 1
+-m, --ants        : 25
+-g, --nnants      : 20
+-a, --alpha       : 1
+-b, --beta        : 2
+-e, --rho         : 0.5
+-q, --q0          : 0.0
+-k, --nnls        : 20
+-l, --localsearch : 3 /* use 3-opt */
+-d, --dlb         : 1 
+
+The default settings imply that as default MAX-MIN Ant System is run
+using a 3-opt local search procedure. Typically, one may want to adjust the parameters
+
+-t, --time
+-o, --optimum
+-m, --ants
+-b, --beta
+-e, --rho 
+-q, --q0
+-l, --localsearch
+Example for running an experiment:
+
+./acotsp -i lin318.tsp 
+
+=======
+OUTPUT
+=======
+
+
+Every experiment produces three files. These files are 
+
+best.tsplibfilename
+cmp.tsplibfilename
+stat.tsplibfilename
+
+where tsplibfilename is the instance identifier of the instance under
+solution. 
+
+The most important of these is the file "cmp.tsplibfilename". This
+file starts with a specification of the parameter settings used to run
+the experiment. The section with the comprehensive experimental data
+starts with
+
+begin problem tsplibfilename
+
+Next the random number seed for the next trial is given
+
+Then, for each trial statistical information on the development of the
+best-so-far solution is given. Each section for a trial starts with
+
+begin try <trial_number>
+
+Then, each time the algorithm finds a new best solution a line 
+
+best <number>	 iteration <number>	 tours <number>	 time <number>
+
+is added, where "best" is the tour length of the best-so-far solution;
+iteration is the iteration number in which this solution is found;
+tours is the number of solutions constructed so far (typically this is
+simple iteration X n_ants); and time is the time at which a new
+best-so-far solution is found
+
+Each trial is ended by 
+
+end try <trial_number>
+
+Once all trials are run the line 
+
+end problem tsplibfilename
+
+is added to end the file. 
+
+The file  best.tsplibfilename
+
+collects the information about parameter settings, the best solution
+found in each trial, and some additional statistical information.
+
